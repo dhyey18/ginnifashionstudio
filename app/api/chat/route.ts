@@ -65,26 +65,30 @@ function getCatalogFallback(userText: string) {
   const query = userText.toLowerCase();
 
   if (/\b(eid|diwali|navratri|raksha|festival|festive)\b/.test(query)) {
-    return "For Eid, a graceful festive look would be bilkul perfect. Try the Rashmika Floral Anarkali for ₹3499 or the Meena Zari Silk Saree for ₹6299; both feel polished, celebratory, and elegant for family gatherings.";
+    return "For festive celebrations, a graceful look would be bilkul perfect. Try the Rashmika Floral Anarkali for ₹3499, the Tara Organza Festive Suit for ₹5499, or the Naina Embroidered Sharara Set for ₹3999; they feel polished and elegant for family gatherings.";
   }
 
   if (/\b(night|evening|dinner|party|reception)\b/.test(query)) {
-    return "For a night event, go for something dressy but comfortable. The Ishita Bandhani Gown at ₹4299 is ekdum perfect for an evening party, or choose the Kavya Palazzo Set at ₹1599 if you want a lighter relaxed look.";
+    return "For a night event, go for something dressy. The Ishita Bandhani Gown at ₹4299 is ekdum perfect for an evening party, or choose the Naina Embroidered Sharara Set at ₹3999 for a stunning ethnic touch.";
   }
 
   if (/\b(wedding|shaadi|bride|bridal)\b/.test(query)) {
-    return "For a wedding, choose a richer fabric and statement detailing. The Divya Mirror Work Lehenga for ₹8999 is a standout pick, while the Meena Zari Silk Saree for ₹6299 gives a classic bahut sundar look.";
+    return "For a wedding, choose a richer fabric and statement detailing. The Pooja Tissue Lehenga for ₹12500 or the Lakshmi Kanjivaram Saree for ₹9999 are standout picks, giving a classic bahut sundar bridal look.";
   }
 
   if (/\b(office|work|formal)\b/.test(query)) {
-    return "For office wear, keep it elegant and easy to move in. The Sunaina Chanderi Suit for ₹2799 or Priya Block Print Kurta Set for ₹1899 would look neat, comfortable, and polished.";
+    return "For office wear, keep it elegant and easy to move in. The Deepa Linen Coord Set for ₹1799, the Sonal Chikankari Kurti for ₹1499, or the Riya Ikkat Silk Saree for ₹4899 would look neat, comfortable, and polished.";
+  }
+
+  if (/\b(beach|holiday|vacation)\b/.test(query)) {
+    return "For a beach holiday or casual outing, the Kajal Printed Kaftan at ₹1299 is breezy and perfect. You can also try the Kavya Palazzo Set for ₹1599 for a relaxed look.";
   }
 
   if (/\b(under|budget|cheap|affordable|price)\b/.test(query)) {
-    return "For a budget-friendly pick, the Ananya Embroidered Dupatta at ₹899 can elevate a simple kurta beautifully. The Kavya Palazzo Set for ₹1599 and Priya Block Print Kurta Set for ₹1899 are also great affordable outfits.";
+    return "For a budget-friendly pick, the Heena Phulkari Dupatta at ₹1199 can elevate a simple outfit beautifully. The Kajal Printed Kaftan for ₹1299 and Sonal Chikankari Kurti for ₹1499 are also great affordable options.";
   }
 
-  return "I can help you choose the right ethnic look by occasion, budget, or style. For a versatile pick, try the Priya Block Print Kurta Set for ₹1899 for everyday wear or Rashmika Floral Anarkali for ₹3499 for festive plans.";
+  return "I can help you choose the right ethnic look by occasion, budget, or style. For a versatile pick, try the Deepa Linen Coord Set for ₹1799 for everyday wear, or the Tara Organza Festive Suit for ₹5499 for festive plans.";
 }
 
 export async function POST(request: Request) {
