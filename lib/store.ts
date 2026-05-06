@@ -47,6 +47,10 @@ interface AppState {
   setUser: (user: Partial<AppState["user"]>) => void;
 
   // Toast
+  toast: Toast | null;
+  showToast: (message: string, variant?: Toast["variant"]) => void;
+  dismissToast: () => void;
+}
 
 export const useStore = create<AppState>((set, get) => ({
   // Cart
