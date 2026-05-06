@@ -6,7 +6,11 @@ import { PRODUCTS, OCCASIONS } from "@/lib/data";
 import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/types";
 
-const CATEGORIES = ["All", "Saree", "Anarkali", "Lehenga", "Kurta Set", "Suit", "Gown", "Palazzo Set", "Dupatta"];
+const CATEGORIES = [
+  "All", "Saree", "Anarkali", "Lehenga", "Suit", "Gown",
+  "Kurta Set", "Palazzo Set", "Sharara Set", "Coord Set",
+  "Kaftan", "Kurti", "Patiala Set", "Dupatta", "Blouse",
+];
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured" },
   { value: "price-asc", label: "Price: Low to High" },

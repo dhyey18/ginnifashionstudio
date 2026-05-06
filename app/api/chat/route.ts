@@ -1,13 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PRODUCTS } from "@/lib/data";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? "";
 
-if (!GEMINI_API_KEY) {
-  console.error("GEMINI_API_KEY is not set in environment variables.");
-}
-
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY ?? "");
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // Compact catalog — one line per product to minimise token cost
 const CATALOG = PRODUCTS.map(
@@ -30,7 +26,7 @@ Rules:
 - Gently redirect off-topic questions back to fashion`;
 
 // Fallback order — all confirmed available on this key; lite has more capacity headroom
-const MODELS = ["gemini-1.5-flash", "gemini-1.5-flash-8b"];
+const MODELS = ["gemini-2.5-flash", "gemini-1.5-flash-8b"];
 
 const ERROR_PHRASE = "Sorry, I'm having trouble connecting";
 
@@ -65,27 +61,35 @@ function getCatalogFallback(userText: string) {
   const query = userText.toLowerCase();
 
   if (/\b(eid|diwali|navratri|raksha|festival|festive)\b/.test(query)) {
-    return "For festive celebrations, a graceful look would be bilkul perfect. Try the Rashmika Floral Anarkali for ₹3499, the Tara Organza Festive Suit for ₹5499, or the Naina Embroidered Sharara Set for ₹3999; they feel polished and elegant for family gatherings.";
+    return "For festive celebrations, a graceful look would be bilkul perfect. Try the Shraddha Velvet Anarkali for ₹5999, the Tara Organza Festive Suit for ₹5499, or the Bindiya Crop Top Sharara for ₹3199 — they feel polished and elegant for family gatherings.";
   }
 
   if (/\b(night|evening|dinner|party|reception)\b/.test(query)) {
-    return "For a night event, go for something dressy. The Ishita Bandhani Gown at ₹4299 is ekdum perfect for an evening party, or choose the Naina Embroidered Sharara Set at ₹3999 for a stunning ethnic touch.";
+    return "For a night event, go for something dressy. The Nandini Mirror Kaftan at ₹1899 is ekdum perfect for an evening party, or choose the Supriya Embroidered Jacket Set at ₹4599 for a stunning ethnic power look.";
   }
 
   if (/\b(wedding|shaadi|bride|bridal)\b/.test(query)) {
-    return "For a wedding, choose a richer fabric and statement detailing. The Pooja Tissue Lehenga for ₹12500 or the Lakshmi Kanjivaram Saree for ₹9999 are standout picks, giving a classic bahut sundar bridal look.";
+    return "For a wedding, choose a richer fabric and statement detailing. The Rukmini Heavy Bridal Lehenga for ₹18999 is the ultimate bahut sundar choice, or the Zara Banarasi Silk Saree for ₹7499 gives a classic bridal look.";
   }
 
   if (/\b(office|work|formal)\b/.test(query)) {
-    return "For office wear, keep it elegant and easy to move in. The Deepa Linen Coord Set for ₹1799, the Sonal Chikankari Kurti for ₹1499, or the Riya Ikkat Silk Saree for ₹4899 would look neat, comfortable, and polished.";
+    return "For office wear, keep it elegant and easy to move in. The Mythili Silk Coord Set for ₹3599, the Vasudha Linen Kurta for ₹1199, or the Rohini Chanderi Saree for ₹3299 would look neat, comfortable, and polished.";
   }
 
   if (/\b(beach|holiday|vacation)\b/.test(query)) {
-    return "For a beach holiday or casual outing, the Kajal Printed Kaftan at ₹1299 is breezy and perfect. You can also try the Kavya Palazzo Set for ₹1599 for a relaxed look.";
+    return "For a beach holiday or casual outing, the Kajal Printed Kaftan at ₹1299 is breezy and perfect. You can also try the Kamini Printed Maxi Dress for ₹1699 for a boho holiday vibe.";
   }
 
   if (/\b(under|budget|cheap|affordable|price)\b/.test(query)) {
-    return "For a budget-friendly pick, the Heena Phulkari Dupatta at ₹1199 can elevate a simple outfit beautifully. The Kajal Printed Kaftan for ₹1299 and Sonal Chikankari Kurti for ₹1499 are also great affordable options.";
+    return "For a budget-friendly pick, the Jhanvi Cotton Patiala Set at ₹1099 is a daily favourite. The Vasudha Linen Kurta for ₹1199 and Harini Bandhani Dupatta for ₹999 are also great affordable options.";
+  }
+
+  if (/\b(saree|sari)\b/.test(query)) {
+    return "We have a beautiful saree range! The Rukmini Heavy Bridal Lehenga aside, for sarees try the Zara Banarasi Silk Saree for ₹7499, the Lakshmi Kanjivaram Saree for ₹9999, or the breezy Geetanjali Kota Doria Saree for ₹2799.";
+  }
+
+  if (/\b(lehenga)\b/.test(query)) {
+    return "Our lehenga collection is stunning! The Rukmini Heavy Bridal Lehenga at ₹18999 is the showstopper, while the Neha Bandhej Lehenga for ₹6799 and Pallavi Peplum Lehenga Set for ₹5299 are gorgeous festive options.";
   }
 
   return "I can help you choose the right ethnic look by occasion, budget, or style. For a versatile pick, try the Deepa Linen Coord Set for ₹1799 for everyday wear, or the Tara Organza Festive Suit for ₹5499 for festive plans.";
