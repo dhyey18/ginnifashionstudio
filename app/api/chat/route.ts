@@ -26,7 +26,7 @@ Rules:
 - Gently redirect off-topic questions back to fashion`;
 
 // Fallback order — all confirmed available on this key; lite has more capacity headroom
-const MODELS = ["gemini-2.5-flash", "gemini-1.5-flash-8b"];
+const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash-lite"];
 
 const ERROR_PHRASE = "Sorry, I'm having trouble connecting";
 
