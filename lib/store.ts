@@ -37,11 +37,16 @@ interface AppState {
   activeOccasion: string | null;
   setActiveOccasion: (occasion: string | null) => void;
 
+  // User Profile
+  user: {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+  };
+  setUser: (user: Partial<AppState["user"]>) => void;
+
   // Toast
-  toast: Toast | null;
-  showToast: (message: string, variant?: Toast["variant"]) => void;
-  dismissToast: () => void;
-}
 
 export const useStore = create<AppState>((set, get) => ({
   // Cart
@@ -133,6 +138,16 @@ export const useStore = create<AppState>((set, get) => ({
   setActiveProduct: (id) => set({ activeProductId: id }),
   activeOccasion: null,
   setActiveOccasion: (occasion) => set({ activeOccasion: occasion }),
+
+  // User Profile
+  user: {
+    name: "Ginni Fashion",
+    email: "ginni@fashion.studio",
+    phone: "+91 98765 43210",
+    address: "123, Fashion Hub, Surat, Gujarat, India",
+  },
+  setUser: (userData) =>
+    set((state) => ({ user: { ...state.user, ...userData } })),
 
   // Toast
   toast: null,

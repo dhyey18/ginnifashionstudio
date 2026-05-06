@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MagnifyingGlass, ShoppingBag, Heart, List, X } from "@phosphor-icons/react";
+import { MagnifyingGlass, ShoppingBag, Heart, List, X, User } from "@phosphor-icons/react";
 import { Logo } from "./Logo";
 import { useStore } from "@/lib/store";
 
@@ -67,8 +67,11 @@ export function Header() {
               <button className="g-icon-btn" aria-label="Search" onClick={() => setSearchOpen(true)}>
                 <MagnifyingGlass size={22} />
               </button>
-              <button className="g-icon-btn" aria-label="Wishlist" onClick={() => setRoute("listing")}>
+              <button className="g-icon-btn" aria-label="Wishlist" onClick={() => setRoute("favorites")}>
                 <Heart size={22} />
+              </button>
+              <button className="g-icon-btn" aria-label="Profile" onClick={() => setRoute("profile")}>
+                <User size={22} />
               </button>
               <button
                 className="g-icon-btn"

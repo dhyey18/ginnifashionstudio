@@ -12,6 +12,8 @@ import { CheckoutScreen } from "@/components/CheckoutScreen";
 import { ConfirmationScreen } from "@/components/ConfirmationScreen";
 import { ToastNotification } from "@/components/ToastNotification";
 import { Chatbot } from "@/components/Chatbot";
+import { FavoritesScreen } from "@/components/FavoritesScreen";
+import { ProfileScreen } from "@/components/ProfileScreen";
 import { useStore } from "@/lib/store";
 import { getProductById } from "@/lib/data";
 import type { Product } from "@/lib/types";
@@ -105,6 +107,12 @@ export default function Page() {
           orderNumber={orderNumber}
         />
       )}
+
+      {route === "favorites" && (
+        <FavoritesScreen onViewProduct={handleViewProduct} />
+      )}
+
+      {route === "profile" && <ProfileScreen />}
 
       {showHeaderFooter && <Footer />}
 

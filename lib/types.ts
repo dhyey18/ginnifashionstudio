@@ -46,4 +46,11 @@ export interface Toast {
   variant: ToastVariant;
 }
 
-export type Route = "home" | "listing" | "pdp" | "checkout" | "confirmation";
+export type Route =
+  | "home"
+  | "listing"
+  | "pdp"
+  | "checkout"
+  | "confirmation"
+  | "favorites"
+  | "profile";
