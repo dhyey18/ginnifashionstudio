@@ -20,29 +20,34 @@ interface ListingScreenProps {
 }
 
 export function ListingScreen({ onViewProduct }: ListingScreenProps) {
-  const { activeOccasion } = useStore();
-  const [category, setCategory] = useState("All");
-  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(activeOccasion);
-  const [sort, setSort] = useState("featured");
+  const { 
+    activeOccasion, 
+    setActiveOccasion,
+    activeCategory,
+    setActiveCategory,
+    activeSort,
+    setActiveSort
+  } = useStore();
   const [priceMax, setPriceMax] = useState(15000);
 
   const filtered = useMemo(() => {
     let list = [...PRODUCTS];
-    if (category !== "All") list = list.filter((p) => p.category === category);
-    if (selectedOccasion) list = list.filter((p) => p.occasion.includes(selectedOccasion));
+    if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
+    if (activeOccasion) list = list.filter((p) => p.occasion.includes(activeOccasion));
     list = list.filter((p) => p.price <= priceMax);
-    switch (sort) {
+    switch (activeSort) {
       case "price-asc": list.sort((a, b) => a.price - b.price); break;
       case "price-desc": list.sort((a, b) => b.price - a.price); break;
       case "newest": list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); break;
       case "rating": list.sort((a, b) => b.rating - a.rating); break;
     }
     return list;
-  }, [category, selectedOccasion, sort, priceMax]);
+  }, [activeCategory, activeOccasion, activeSort, priceMax]);
 
   function clearFilters() {
-    setCategory("All");
-    setSelectedOccasion(null);
+    setActiveCategory("All");
+    setActiveOccasion(null);
+    setActiveSort("featured");
     setPriceMax(15000);
   }
 
@@ -52,7 +57,7 @@ export function ListingScreen({ onViewProduct }: ListingScreenProps) {
         {/* Page header */}
         <div className="g-listing-head">
           <p className="g-listing-eyebrow">Collection</p>
-          <h1 className="g-listing-title">{selectedOccasion ? OCCASIONS.find(o => o.id === selectedOccasion)?.name ?? "All Styles" : "All Styles"}</h1>
+          <h1 className="g-listing-title">{activeOccasion ? OCCASIONS.find(o => o.id === activeOccasion)?.name ?? "All Styles" : "All Styles"}</h1>
           <p className="g-listing-sub">{filtered.length} handpicked styles for you</p>
         </div>
 
@@ -64,22 +69,22 @@ export function ListingScreen({ onViewProduct }: ListingScreenProps) {
               <button
                 key={occ.id}
                 className="g-chip"
-                data-on={selectedOccasion === occ.id}
-                onClick={() => setSelectedOccasion(selectedOccasion === occ.id ? null : occ.id)}
+                data-on={activeOccasion === occ.id}
+                onClick={() => setActiveOccasion(activeOccasion === occ.id ? null : occ.id)}
               >
                 {occ.emoji} {occ.name}
               </button>
             ))}
           </div>
           <div style={{ display: "flex", gap: "var(--sp-3)", alignItems: "center" }}>
-            {(category !== "All" || selectedOccasion || priceMax < 15000) && (
+            {(activeCategory !== "All" || activeOccasion || activeSort !== "featured" || priceMax < 15000) && (
               <button className="g-chip" onClick={clearFilters}>Clear filters ×</button>
             )}
             <label htmlFor="sort-select" className="g-listing-count">Sort:</label>
             <select
               id="sort-select"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
+              value={activeSort}
+              onChange={(e) => setActiveSort(e.target.value)}
               style={{
                 background: "white", border: "1.5px solid var(--g-line-rose)", padding: "8px 12px",
                 borderRadius: "var(--r-pill)", fontSize: 13, fontFamily: "var(--font-sans)",
@@ -103,14 +108,14 @@ export function ListingScreen({ onViewProduct }: ListingScreenProps) {
                 <div
                   key={cat}
                   className="g-filter-row"
-                  data-on={category === cat}
-                  onClick={() => setCategory(cat)}
+                  data-on={activeCategory === cat}
+                  onClick={() => setActiveCategory(cat)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && setCategory(cat)}
+                  onKeyDown={(e) => e.key === "Enter" && setActiveCategory(cat)}
                 >
                   <span className="g-filter-label">
-                    <span className="g-filter-check">{category === cat ? "✓" : ""}</span>
+                    <span className="g-filter-check">{activeCategory === cat ? "✓" : ""}</span>
                     {cat}
                   </span>
                 </div>

@@ -6,12 +6,12 @@ import { Logo } from "./Logo";
 import { useStore } from "@/lib/store";
 
 const NAV_LINKS = [
-  { label: "New Arrivals", occasion: null },
-  { label: "Sarees", occasion: null },
-  { label: "Anarkalis", occasion: null },
-  { label: "Lehengas", occasion: null },
-  { label: "Festive", occasion: "festival" },
-  { label: "Collections", occasion: null },
+  { label: "New Arrivals", occasion: null, category: "All", sort: "newest" },
+  { label: "Sarees", occasion: null, category: "Saree", sort: "featured" },
+  { label: "Anarkalis", occasion: null, category: "Anarkali", sort: "featured" },
+  { label: "Lehengas", occasion: null, category: "Lehenga", sort: "featured" },
+  { label: "Festive", occasion: "festival", category: "All", sort: "featured" },
+  { label: "Collections", occasion: null, category: "All", sort: "featured" },
 ];
 
 export function Header() {
@@ -27,8 +27,10 @@ export function Header() {
 
   const count = cartCount();
 
-  function handleNavClick(occasion: string | null) {
+  function handleNavClick(occasion: string | null, category: string, sort: string) {
     setActiveOccasion(occasion);
+    useStore.getState().setActiveCategory(category);
+    useStore.getState().setActiveSort(sort);
     setRoute("listing");
     setMobileOpen(false);
   }
@@ -44,7 +46,7 @@ export function Header() {
           {/* Left nav */}
           <nav className="g-nav" aria-label="Main navigation">
             {NAV_LINKS.slice(0, 3).map((link) => (
-              <button key={link.label} className="g-nav-link" onClick={() => handleNavClick(link.occasion)}>
+              <button key={link.label} className="g-nav-link" onClick={() => handleNavClick(link.occasion, link.category, link.sort)}>
                 {link.label}
               </button>
             ))}
@@ -57,7 +59,7 @@ export function Header() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0 }}>
             <nav className="g-nav" style={{ marginRight: "var(--sp-3)" }} aria-label="Secondary navigation">
               {NAV_LINKS.slice(3).map((link) => (
-                <button key={link.label} className="g-nav-link" onClick={() => handleNavClick(link.occasion)}>
+                <button key={link.label} className="g-nav-link" onClick={() => handleNavClick(link.occasion, link.category, link.sort)}>
                   {link.label}
                 </button>
               ))}

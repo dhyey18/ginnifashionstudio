@@ -36,6 +36,10 @@ interface AppState {
   setActiveProduct: (id: string | null) => void;
   activeOccasion: string | null;
   setActiveOccasion: (occasion: string | null) => void;
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
+  activeSort: string;
+  setActiveSort: (sort: string) => void;
 
   // User Profile
   user: {
@@ -142,6 +146,10 @@ export const useStore = create<AppState>((set, get) => ({
   setActiveProduct: (id) => set({ activeProductId: id }),
   activeOccasion: null,
   setActiveOccasion: (occasion) => set({ activeOccasion: occasion }),
+  activeCategory: "All",
+  setActiveCategory: (category) => set({ activeCategory: category }),
+  activeSort: "featured",
+  setActiveSort: (sort) => set({ activeSort: sort }),
 
   // User Profile
   user: {
