@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -X POST http://localhost:3000/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"Hi! I need a saree for a wedding\"}]}')",
+      "Bash(cat /tmp/ginni-dev.log 2>&1 | tail -20)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -X POST http://localhost:3003/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"Hi! I need a saree for a wedding\"}]}')",
+      "Bash(kill 159541)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(curl -s -X POST http://localhost:3004/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"Hi! I need a saree for a wedding\"}]}')",
+      "Bash(netstat -tlnp)",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"Hi! I need a saree for a wedding\"}]}')",
+      "Read(//proc/**)",
+      "Bash(xargs -I{} bash -c 'cat {} | tr \"\\\\0\" \" \" | head -c 300; echo \"---PID: $\\(echo {} | cut -d/ -f3\\)\"')",
+      "Bash(curl -s -X POST http://localhost:3002/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"what is a saree\"}]}')",
+      "Bash(curl -s -X POST http://localhost:3002/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"assistant\",\"content\":\"Namaste! 🙏 I'\\\\''m Ginni, your personal style assistant. Looking for something special? I'\\\\''m here to help you find the perfect ethnic wear for any occasion!\"},{\"role\":\"user\",\"content\":\"Show me your bestsellers\"},{\"role\":\"assistant\",\"content\":\"Sorry, I'\\\\''m having trouble connecting right now. Please try again in a moment!\"},{\"role\":\"user\",\"content\":\"what is saree\"},{\"role\":\"assistant\",\"content\":\"Sorry, I'\\\\''m having trouble connecting right now. Please try again in a moment!\"},{\"role\":\"user\",\"content\":\"what is saree\"}]}')",
+      "Bash(curl -s \"https://generativelanguage.googleapis.com/v1beta/models?key=AIzaSyBayM19LsoHZ4j641xkhInAPIIXZm-PKTI\")",
+      "Bash(python3 -c \"import sys,json; [print\\(m['name'], m.get\\('supportedGenerationMethods',''\\)\\) for m in json.load\\(sys.stdin\\).get\\('models',[]\\)]\")",
+      "Bash(curl -s -X POST http://localhost:3002/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"suggest a saree for wedding\"}]}')",
+      "Bash(curl -s -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=AIzaSyBayM19LsoHZ4j641xkhInAPIIXZm-PKTI' -H 'Content-Type: application/json' -d '{\"contents\":[{\"role\":\"user\",\"parts\":[{\"text\":\"say hi in one word\"}]}]}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('candidates',[{}]\\)[0].get\\('content',{}\\).get\\('parts',[{}]\\)[0].get\\('text','ERR:'+str\\(d\\)\\)\\)\")",
+      "Bash(curl -s -X POST http://localhost:3002/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"suggest a saree for a wedding\"}]}')"
+    ]
+  }
+}
