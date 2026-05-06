@@ -25,6 +25,16 @@ export function Header() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
   const count = cartCount();
 
   function handleNavClick(occasion: string | null, category: string, sort: string) {
@@ -43,7 +53,7 @@ export function Header() {
 
       <header className="g-header" data-scrolled={scrolled} style={{ position: "sticky", top: 0, zIndex: 50 }}>
         <div className="g-header-row">
-          {/* Left nav */}
+          {/* Left nav — hidden on mobile */}
           <nav className="g-nav" aria-label="Main navigation">
             {NAV_LINKS.slice(0, 3).map((link) => (
               <button key={link.label} className="g-nav-link" onClick={() => handleNavClick(link.occasion, link.category, link.sort)}>
@@ -53,7 +63,7 @@ export function Header() {
           </nav>
 
           {/* Centre logo */}
-          <Logo onClick={() => setRoute("home")} />
+          <Logo onClick={() => { setRoute("home"); setMobileOpen(false); }} />
 
           {/* Right nav + icons */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0 }}>
@@ -69,10 +79,10 @@ export function Header() {
               <button className="g-icon-btn" aria-label="Search" onClick={() => setSearchOpen(true)}>
                 <MagnifyingGlass size={22} />
               </button>
-              <button className="g-icon-btn" aria-label="Wishlist" onClick={() => setRoute("favorites")}>
+              <button className="g-icon-btn g-hide-mobile" aria-label="Wishlist" onClick={() => { setRoute("favorites"); setMobileOpen(false); }}>
                 <Heart size={22} />
               </button>
-              <button className="g-icon-btn" aria-label="Profile" onClick={() => setRoute("profile")}>
+              <button className="g-icon-btn g-hide-mobile" aria-label="Profile" onClick={() => { setRoute("profile"); setMobileOpen(false); }}>
                 <User size={22} />
               </button>
               <button
@@ -86,9 +96,9 @@ export function Header() {
                   <span className="g-badge" aria-hidden>{count > 9 ? "9+" : count}</span>
                 )}
               </button>
+              {/* Hamburger — visible only on mobile via CSS */}
               <button
-                className="g-icon-btn"
-                style={{ display: "none" }}
+                className="g-icon-btn g-hamburger"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen((v) => !v)}
@@ -99,6 +109,52 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      {/* Mobile full-screen menu */}
+      <div className="g-mobile-menu" data-open={mobileOpen} aria-hidden={!mobileOpen}>
+        <div className="g-mobile-menu-head">
+          <Logo onClick={() => { setRoute("home"); setMobileOpen(false); }} />
+          <button className="g-icon-btn" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+            <X size={24} />
+          </button>
+        </div>
+
+        <nav className="g-mobile-nav" aria-label="Mobile navigation">
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link.label}
+              className="g-mobile-nav-link"
+              onClick={() => handleNavClick(link.occasion, link.category, link.sort)}
+            >
+              {link.label}
+              <span style={{ fontSize: 18, opacity: 0.4 }}>›</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="g-mobile-nav-icons">
+          <button className="g-icon-btn" aria-label="Search" onClick={() => { setSearchOpen(true); setMobileOpen(false); }}>
+            <MagnifyingGlass size={24} />
+          </button>
+          <button className="g-icon-btn" aria-label="Wishlist" onClick={() => { setRoute("favorites"); setMobileOpen(false); }}>
+            <Heart size={24} />
+          </button>
+          <button className="g-icon-btn" aria-label="Profile" onClick={() => { setRoute("profile"); setMobileOpen(false); }}>
+            <User size={24} />
+          </button>
+          <button
+            className="g-icon-btn"
+            aria-label={`Shopping bag, ${count} items`}
+            onClick={() => { setBagOpen(true); setMobileOpen(false); }}
+            style={{ position: "relative" }}
+          >
+            <ShoppingBag size={24} />
+            {count > 0 && (
+              <span className="g-badge" aria-hidden>{count > 9 ? "9+" : count}</span>
+            )}
+          </button>
+        </div>
+      </div>
     </>
   );
 }

@@ -45,7 +45,7 @@ export function HomeScreen({ onViewProduct, onViewListing }: HomeScreenProps) {
         </div>
         <div className="g-hero-img-wrap">
           <div className="g-hero-arch-deco" />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--sp-2)", height: "100%", padding: "var(--sp-5)" }}>
+          <div className="g-hero-mosaic">
             {PRODUCTS.slice(0, 4).map((p) => (
               <button
                 key={p.id}
@@ -151,7 +151,7 @@ export function HomeScreen({ onViewProduct, onViewListing }: HomeScreenProps) {
               <p className="g-section-sub" style={{ textAlign: "center" }}>Real love from real women across India</p>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "var(--sp-5)" }}>
+          <div className="g-reviews-grid">
             {REVIEWS.map((r) => (
               <blockquote key={r.id} style={{ background: "white", borderRadius: "var(--r-xl)", padding: "var(--sp-5)", margin: 0, boxShadow: "var(--sh-sm)" }}>
                 <div className="g-review-stars" aria-label={`${r.rating} stars`}>{"★".repeat(r.rating)}</div>
