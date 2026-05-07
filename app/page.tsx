@@ -120,7 +120,7 @@ export default function Page() {
       <BagDrawer onCheckout={handleCheckout} />
       <SearchOverlay onViewProduct={handleViewProduct} />
       <ToastNotification />
-      <Chatbot />
+      <Chatbot onViewProduct={handleViewProduct} />
     </>
   );
 }

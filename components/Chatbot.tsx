@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChatCircleDots, X, PaperPlaneRight } from "@phosphor-icons/react";
+import { PRODUCTS } from "@/lib/data";
+import type { Product } from "@/lib/types";
 
 interface Message {
   role: "user" | "assistant";
@@ -16,7 +18,59 @@ const QUICK_PROMPTS = [
   "I need something under ₹2000",
 ];
 
-export function Chatbot() {
+// Map from product name -> Product for quick lookup
+const PRODUCT_BY_NAME = new Map(PRODUCTS.map((p) => [p.name, p]));
+
+// Pattern source built once; a NEW RegExp is created per call so lastIndex never bleeds between renders
+const PRODUCT_PATTERN = PRODUCTS
+  .slice()
+  .sort((a, b) => b.name.length - a.name.length)
+  .map((p) => `\\*{0,2}(${p.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})\\*{0,2}`)
+  .join("|");
+
+function renderWithProductLinks(
+  text: string,
+  onViewProduct: (p: Product) => void,
+  onClose: () => void
+) {
+  const regex = new RegExp(PRODUCT_PATTERN, "g");
+  const parts: React.ReactNode[] = [];
+  let key = 0;
+  let lastIndex = 0;
+
+  for (const match of text.matchAll(regex)) {
+    const matchStart = match.index!;
+    const productName = match.slice(1).find((g) => g !== undefined);
+    if (!productName) continue;
+
+    const product = PRODUCT_BY_NAME.get(productName);
+    if (!product) continue;
+
+    if (matchStart > lastIndex) {
+      parts.push(text.slice(lastIndex, matchStart));
+    }
+
+    parts.push(
+      <button
+        key={key++}
+        className="g-chat-product-link"
+        onClick={() => { onViewProduct(product); onClose(); }}
+      >
+        {productName}
+      </button>
+    );
+
+    lastIndex = matchStart + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : [text];
+}
+
+export function Chatbot({ onViewProduct }: { onViewProduct: (p: Product) => void }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "Namaste! 🙏 I'm Ginni, your personal style assistant. Looking for something special? I'm here to help you find the perfect ethnic wear for any occasion!" },
@@ -111,7 +165,11 @@ export function Chatbot() {
                 <div className="g-chat-bot-avt" aria-hidden>G</div>
               )}
               <div className="g-chat-bubble">
-                <div className="g-chat-text">{msg.content}</div>
+                <div className="g-chat-text">
+                  {msg.role === "assistant" && !msg.isError
+                    ? renderWithProductLinks(msg.content, onViewProduct, () => setOpen(false))
+                    : msg.content}
+                </div>
               </div>
             </div>
           ))}
