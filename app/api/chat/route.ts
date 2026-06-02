@@ -5,25 +5,62 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? "";
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-// Compact catalog — one line per product to minimise token cost
-const CATALOG = PRODUCTS.map(
-  (p) =>
-    `${p.name} | ${p.category} | ₹${p.price} | fabric: ${p.fabric} | occasions: ${p.occasion.join(",")} | rating: ${p.rating}`
-).join("\n");
+// CSS hex → closest named colour for human-readable catalog entries
+const HEX_COLOR_NAMES: Record<string, string> = {
+  "#C0392B": "red", "#922B21": "dark red", "#A93226": "crimson", "#E74C3C": "coral red",
+  "#8E44AD": "purple", "#9B59B6": "violet", "#6C3483": "deep purple",
+  "#2980B9": "blue", "#1A5276": "navy", "#1F618D": "steel blue", "#85C1E9": "light blue",
+  "#1E8449": "green", "#117A65": "teal green", "#82E0AA": "mint",
+  "#D4AC0D": "gold", "#F39C12": "amber", "#7D6608": "dark gold", "#F1C40F": "yellow",
+  "#F0E6D3": "cream", "#FDEBD0": "peach", "#E8D5C4": "blush", "#F9E79F": "pale yellow",
+  "#D5F5E3": "pale green", "#76D7C4": "aqua", "#F1948A": "salmon", "#F0B27A": "apricot",
+  "#5D6D7E": "slate", "#2C3E50": "charcoal", "#ECF0F1": "white", "#BDC3C7": "silver",
+};
+
+function hexToColorName(hex: string): string {
+  return HEX_COLOR_NAMES[hex] ?? hex;
+}
+
+// Rich catalog — enough detail for Gemini to answer colour, occasion, budget, and style questions accurately
+const CATALOG = PRODUCTS
+  .filter((p) => p.id.startsWith("gf-")) // only sellable products, no collections
+  .map((p) => {
+    const tags: string[] = [];
+    if (p.isBestseller) tags.push("bestseller");
+    if (p.isNew) tags.push("new arrival");
+    if (p.isFeatured) tags.push("featured");
+    const colorNames = p.colors.map(hexToColorName).join(", ");
+    const tagStr = tags.length ? ` [${tags.join(", ")}]` : "";
+    // One sentence description trimmed to first sentence only to keep token cost low
+    const shortDesc = p.description.split(".")[0].trim();
+    return `• ${p.name}${tagStr}
+  Category: ${p.category} | Price: ₹${p.price}${p.originalPrice ? ` (was ₹${p.originalPrice})` : ""} | Rating: ${p.rating}/5
+  Fabric: ${p.fabric} | Pattern: ${p.pattern} | Sizes: ${p.sizes.join(", ")}
+  Colors: ${colorNames}
+  Occasions: ${p.occasion.join(", ")}
+  About: ${shortDesc}.`;
+  })
+  .join("\n\n");
 
 const SYSTEM_PROMPT = `You are Ginni, the warm and knowledgeable style assistant for Ginni's Fashion Studio — an Indian ethnic wear boutique.
 
-Personality: Friendly, enthusiastic, like a trusted fashion-savvy friend. Use occasional Hindi words naturally (bilkul, bahut sundar, ekdum perfect). Keep replies to 2-4 sentences — concise and conversational.
+Personality: Friendly, enthusiastic, like a trusted fashion-savvy friend. Use occasional Hindi words naturally (bilkul, bahut sundar, ekdum perfect). Keep replies concise — 2-4 sentences max.
 
-Product catalog (name | category | price | fabric | occasions | rating):
+PRODUCT CATALOG:
 ${CATALOG}
 
-Rules:
-- Recommend products by exact name from the catalog, mention price in ₹
-- Max 2-3 recommendations per message
-- Stay focused on fashion, styling, and this store's products
-- Treat Eid, Diwali, Navratri, Raksha Bandhan, and similar celebrations as festival occasions
-- Gently redirect off-topic questions back to fashion`;
+RULES:
+- Only recommend products that exist in the catalog above — never invent names or prices
+- Always use the product's exact name as it appears in the catalog
+- When recommending, always mention the price in ₹
+- Filter by occasion, budget, fabric, color, or category based on what the customer asks
+- For budget queries, only suggest products within the stated price range
+- For color queries, match against the Colors field
+- For bestsellers/popular, prefer products tagged [bestseller]
+- For new arrivals, prefer products tagged [new arrival]
+- Max 2-3 recommendations per reply
+- Treat Eid, Diwali, Navratri, Raksha Bandhan, Holi, Karwa Chauth as festival occasions
+- Stay focused on fashion and this store's products; gently redirect off-topic questions`;
 
 const MODELS = ["gemini-2.5-flash"];
 

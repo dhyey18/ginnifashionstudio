@@ -199,7 +199,7 @@ export function Chatbot({ onViewProduct }: { onViewProduct: (p: Product) => void
         )}
 
         <div className="g-chat-foot">
-          <form className="g-chat-input-row" onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}>
+          <form className="g-chat-input-row" onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} suppressHydrationWarning>
             <input
               ref={inputRef}
               type="text"
